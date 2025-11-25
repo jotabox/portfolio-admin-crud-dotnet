@@ -4,7 +4,7 @@ using Domain.Authorization.Permissions;
 
 namespace WebApp.Areas.Admin.Controllers
 {
-    [AdminArea]
+    [Area("Admin")]
     [Authorize(Policy = DashboardPermissions.View)]
     public class DashboardController : Controller
     {

@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using WebApp.Extensions
+@using Domain.Authorization.Permissions
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
@@ -27,16 +30,16 @@
             color: white;
         }
 
-        .sidebar a {
-            color: white;
-            padding: 12px;
-            display: block;
-            text-decoration: none;
-        }
+            .sidebar a {
+                color: white;
+                padding: 12px;
+                display: block;
+                text-decoration: none;
+            }
 
-        .sidebar a:hover {
-            background-color: #495057;
-        }
+                .sidebar a:hover {
+                    background-color: #495057;
+                }
 
         .content {
             flex: 1;
@@ -56,10 +59,15 @@
     <div class="sidebar">
         <h4 class="p-3">Admin Panel</h4>
 
-        <a href="/Admin/Dashboard">
-            <i class="bi bi-speedometer2"></i> Dashboard
-        </a>
+        @* Menu controlado por permissão *@
+        @if (User.HasPermission(DashboardPermissions.View))
+        {
+            <a href="/Admin/Dashboard">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+        }
 
+        @* Itens que ainda não têm permissões *@
         <a href="#">
             <i class="bi bi-people"></i> Usuários
         </a>
@@ -82,7 +90,7 @@
                         @User.Identity.Name
                     </span>
 
-                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                    <form asp-area="Identity" asp-page="/Account/Logout" method="post">
                         <button class="btn btn-danger btn-sm">Sair</button>
                     </form>
                 }
