@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Domain.Authorization.Permissions;
+using System.Security.Claims;
+
 
 namespace WebApp.Data
 {
@@ -29,6 +32,18 @@ namespace WebApp.Data
 
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
+
+            // SEED DE PERMISSÕES PARA O ADMIN
+            foreach (var permission in PermissionNames.GetAllPermissions())
+            {
+                var claims = await userManager.GetClaimsAsync(admin);
+
+                if (!claims.Any(c => c.Type == "Permission" && c.Value == permission))
+                {
+                    await userManager.AddClaimAsync(admin, new Claim("Permission", permission));
+                }
+            }
+
         }
     }
 }
