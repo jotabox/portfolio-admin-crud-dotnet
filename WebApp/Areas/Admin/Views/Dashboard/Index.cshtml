@@ -1,4 +1,37 @@
-﻿
+﻿@model WebApp.Areas.Admin.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Breadcrumb"] = "Dashboard";
+}
 
-<h1>Dashboard Administrativo</h1>
-<p>Bem-vindo ao painel administrativo.</p>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Usuários</h6>
+                <div class="stat-value">@Model.UsersCount</div>
+                <div class="text-muted small">Usuários registrados</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Projetos</h6>
+                <div class="stat-value">@Model.ProjectsCount</div>
+                <div class="text-muted small">Projetos publicados</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Visitas</h6>
+                <div class="stat-value">@Model.VisitsCount</div>
+                <div class="text-muted small">Este mês</div>
+            </div>
+        </div>
+    </div>
+</div>

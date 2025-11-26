@@ -1,0 +1,147 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Domain.Authorization.Permissions
+@using WebApp.Extensions
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IHttpContextAccessor HttpContextAccessor
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    // título padrão
+    var title = ViewData["Title"] ?? "Painel Admin";
+    ViewData["Breadcrumb"] = "Usuários";
+
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title - Admin</title>
+
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="admin-app" class="admin-app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top d-flex align-items-center justify-content-between px-3">
+                <h5 class="mb-0">MeuPortfólio</h5>
+                <button id="btnToggleSidebar" class="d-md-none" aria-label="Menu">
+                    <i class="bi bi-list" style="font-size:1.4rem"></i>
+                </button>
+            </div>
+
+            <nav class="nav-section mt-3">
+                <!-- exemplo: group principal -->
+                @* Dashboard *@
+                @if (User.HasPermission(DashboardPermissions.View))
+                {
+                    <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                }
+
+                @* Usuários (exemplo aninhado) *@
+                @if (User.HasPermission("Users.View") || User.HasPermission("Users.Manage"))
+                {
+                    <div class="nav-group">
+                        <div class="nav-group-title"><i class="bi bi-people"></i> Usuários</div>
+                        <div class="nav-group-body">
+                            @if (User.HasPermission("Users.View"))
+                            {
+                                <a class="nav-link sub" asp-area="Admin" asp-controller="Users" asp-action="Index">Listar</a>
+                            }
+                            @if (User.HasPermission("Users.Manage"))
+                            {
+                                <a class="nav-link sub" asp-area="Admin" asp-controller="Users" asp-action="Create">Criar</a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @* Configurações *@
+                @if (User.HasPermission("Settings.Access"))
+                {
+                    <a class="nav-link" asp-area="Admin" asp-controller="Settings" asp-action="Index">
+                        <i class="bi bi-gear"></i><span>Configurações</span>
+                    </a>
+                }
+            </nav>
+
+            <div class="sidebar-footer mt-auto p-3">
+                <small class="text-muted">© @DateTime.Now.Year - Portfólio</small>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="main-wrapper">
+            <!-- TOPBAR -->
+            <header class="topbar d-flex align-items-center justify-content-between px-3">
+                <div class="topbar-left">
+                    <button id="btnCollapse" class="btn btn-sm btn-ghost d-none d-md-inline" title="Colapsar sidebar"><i class="bi bi-list"></i></button>
+                </div>
+
+                <div class="topbar-right d-flex align-items-center gap-3">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-bell" title="Notificações" style="font-size:1.15rem"></i>
+                            <div class="user-block d-flex align-items-center gap-2">
+                                <i class="bi bi-person-circle" style="font-size:1.4rem"></i>
+                                <div class="user-meta">
+                                    <div class="user-name">@User.Identity?.Name</div>
+                                    <div class="user-role small text-muted">
+                                        @* opcional: role list *@
+                                        @(
+                                                                            string.Join(", ", User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value))
+                                                                            )
+                                </div>
+                            </div>
+
+                                <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm">Sair</button>
+                                </form>
+                            </div>
+                        </div>
+                                        }
+                </div>
+            </header>
+
+            <!-- BREADCRUMB (use ViewData["Breadcrumb"] para setar se quiser) -->
+            <div class="container-fluid breadcrumb-wrap px-4 py-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        @if (ViewData["Breadcrumb"] != null)
+                        {
+                            <li class="breadcrumb-item active" aria-current="page">@ViewData["Breadcrumb"]</li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item active" aria-current="page">@title</li>
+                        }
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <main class="container-fluid p-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

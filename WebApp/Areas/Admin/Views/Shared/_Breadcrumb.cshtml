@@ -1,0 +1,10 @@
+﻿@*
+  uso: @Html.Partial("_Breadcrumb", new { Title = "Listar Usuários" })
+*@
+@model dynamic
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model?.Title</li>
+    </ol>
+</nav>
