@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Domain;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -12,6 +13,9 @@ namespace Infrastructure.Data
         {
 
         }
+
+        public DbSet<Project> Projects { get; set; }
+
 
     }
 }

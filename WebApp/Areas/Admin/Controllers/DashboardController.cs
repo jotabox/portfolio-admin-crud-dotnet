@@ -40,5 +40,6 @@ namespace WebApp.Areas.Admin.Controllers
             // placeholder — substitua pelo seu contador real se existir
             return Task.FromResult(1200);
         }
+
     }
 }
