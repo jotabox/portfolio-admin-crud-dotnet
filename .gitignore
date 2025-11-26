@@ -2,4 +2,48 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/PortfolioAdmin
+
+# Build results
+bin/
+obj/
+out/
+artifacts/
+
+# Visual Studio cache
+.vs/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Mac/Linux
+.DS_Store
+*.swp
+
+# Logs
+*.log
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Secrets
+secrets.json
+appsettings.Development.json
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Rider
+.idea/
+
+# Publish output
+/wwwroot/dist/
+publish/
