@@ -1,0 +1,59 @@
+﻿@model Domain.Entities.Project
+
+@{
+    ViewData["Title"] = "Novo Projeto";
+    Layout = "/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Criar Novo Projeto</h2>
+
+<form asp-area="Admin" asp-controller="Project" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Título</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tecnologias (ex: C#, .NET, PostgreSQL)</label>
+        <input asp-for="Technologies" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">GitHub (URL)</label>
+        <input asp-for="GitHubUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Demo (URL)</label>
+        <input asp-for="DemoUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Imagem (URL)</label>
+        <input asp-for="ImageUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Publicar?</label>
+        <select asp-for="IsPublished" class="form-control">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ordem (para aparecer no site)</label>
+        <input asp-for="Order" class="form-control" type="number" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-area="Admin" asp-controller="Project" asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>

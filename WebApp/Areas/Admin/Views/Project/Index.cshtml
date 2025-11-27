@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Domain.Entities.Project>
+
+@{
+    ViewData["Title"] = "Projetos";
+    Layout = "/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml"; // se necessário
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Projetos</h2>
+    <a asp-area="Admin" asp-controller="Project" asp-action="Create" class="btn btn-primary">Novo Projeto</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width:80px;">Thumb</th>
+            <th>Título</th>
+            <th class="d-none d-md-table-cell">Tecnologias</th>
+            <th class="d-none d-lg-table-cell">Descrição</th>
+            <th>Public.</th>
+            <th style="width:90px">Ordem</th>
+            <th style="width:160px">Criado em</th>
+            <th style="width:160px">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.Title" style="width:64px;height:40px;object-fit:cover;border-radius:4px;" />
+                    }
+                    else
+                    {
+                        <div style="width:64px;height:40px;background:#efefef;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#999;">
+                            <i class="bi bi-image"></i>
+                        </div>
+                    }
+                </td>
+                <td>
+                    <strong>@item.Title</strong>
+                    <div class="small text-muted">
+                        <a href="@item.GitHubUrl" target="_blank" rel="noopener" class="me-2">Repo</a>
+                        @if (!string.IsNullOrWhiteSpace(item.DemoUrl))
+                        {
+                            <a href="@item.DemoUrl" target="_blank" rel="noopener">Demo</a>
+                        }
+                    </div>
+                </td>
+                <td class="d-none d-md-table-cell">@item.Technologies</td>
+                <td class="d-none d-lg-table-cell text-truncate" style="max-width:320px;">@item.Description</td>
+                <td>
+                    @if (item.IsPublished)
+                    {
+                        <span class="badge bg-success">Sim</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Não</span>
+                    }
+                </td>
+                <td>@item.Order</td>
+                <td>@item.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-area="Admin" asp-controller="Project" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Ver</a>
+                        <a asp-area="Admin" asp-controller="Project" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+                        <form asp-area="Admin" asp-controller="Project" asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Deseja excluir este projeto?');" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
