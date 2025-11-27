@@ -34,23 +34,34 @@ namespace WebApp.Areas.Admin.Controllers
         }
 
 
-        // POST: /Admin/Project/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Project project)
+        public async Task<IActionResult> Create(Project project, IFormFile? ImageFile)
         {
             if (!ModelState.IsValid)
                 return View(project);
 
-            project.CreatedAt = DateTime.UtcNow;
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
+                var filePath = Path.Combine("wwwroot/uploads/projects", fileName);
 
-            _context.Add(project);
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                    await ImageFile.CopyToAsync(stream);
+
+                project.ImageUrl = "/uploads/projects/" + fileName;
+            }
+
+            project.CreatedAt = DateTime.UtcNow;
+            project.UpdatedAt = DateTime.UtcNow;
+
+            _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
-
-
 
     }
 }
