@@ -1,0 +1,72 @@
+﻿@model Domain.Entities.Project
+
+@{
+    ViewData["Title"] = "Editar Projeto";
+    Layout = "/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Editar Projeto</h2>
+
+<form asp-area="Admin" asp-controller="Project" asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Título</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tecnologias</label>
+        <input asp-for="Technologies" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">GitHub URL</label>
+        <input asp-for="GitHubUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Demo URL</label>
+        <input asp-for="DemoUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Imagem Atual</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" width="150" class="img-thumbnail mb-2" />
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Enviar nova imagem (opcional)</label>
+        <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Publicado?</label>
+        <select asp-for="IsPublished" class="form-control">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ordem</label>
+        <input asp-for="Order" class="form-control" type="number" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
